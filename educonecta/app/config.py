@@ -2,24 +2,23 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 class Settings(BaseSettings):
-    DATABASE_URL: str
-    SECRET_KEY: str
-    GEMINI_API_KEY: str
-
-    SENDGRID_API_KEY: Optional[str] = None
-    TWILIO_ACCOUNT_SID: Optional[str] = None
-    TWILIO_AUTH_TOKEN: Optional[str] = None
-
-    FRONTEND_URL: str = "http://localhost:3000"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    REFRESH_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
-    JWT_ALGORITHM: str = "HS256"
+    database_url: str = Field(alias="DATABASE_URL")
+    secret_key: str = Field(alias="SECRET_KEY")
+    gemini_api_key: str = Field(alias="GEMINI_API_KEY")
+    sendgrid_api_key: Optional[str] = Field(default=None, alias="SENDGRID_API_KEY")
+    twilio_account_sid: Optional[str] = Field(default=None, alias="TWILIO_ACCOUNT_SID")
+    twilio_auth_token: Optional[str] = Field(default=None, alias="TWILIO_AUTH_TOKEN")
+    frontend_url: str = Field(default="http://localhost:3000", alias="FRONTEND_URL")
+    access_token_expire_minutes: int = 60
+    refresh_token_expire_minutes: int = 60 * 24 * 7
+    jwt_algorithm: str = "HS256"
 
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
