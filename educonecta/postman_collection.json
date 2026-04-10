@@ -1,0 +1,146 @@
+{
+    "info": {
+        "name": "EduConecta IA - Flujo Apoderado y Directivo",
+        "_postman_id": "3e3e0d6d-bf95-40df-b9df-d7d3284fab5f",
+        "description": "Coleccion ordenada para probar login apoderado, endpoints de apoderado y dashboard de directivo.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000"
+        },
+        {
+            "key": "token",
+            "value": ""
+        },
+        {
+            "key": "directivo_token",
+            "value": ""
+        }
+    ],
+    "item": [
+        {
+            "name": "1. POST /auth/login (apoderado)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": "{{base_url}}/auth/login",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"apoderado@educonecta.cl\",\n  \"password\": \"test1234\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const json = pm.response.json();",
+                            "if (json.access_token) {",
+                            "  pm.collectionVariables.set('token', json.access_token);",
+                            "}"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. GET /apoderado/mi-hijo/1",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": "{{base_url}}/apoderado/mi-hijo/1"
+            }
+        },
+        {
+            "name": "3. POST /apoderado/chat",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": "{{base_url}}/apoderado/chat",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"alumno_id\": 1,\n  \"mensaje\": \"¿Cómo va Matías en matemáticas?\"\n}"
+                }
+            }
+        },
+        {
+            "name": "4. GET /apoderado/recomendaciones/1",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": "{{base_url}}/apoderado/recomendaciones/1"
+            }
+        },
+        {
+            "name": "5A. POST /auth/login (directivo)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": "{{base_url}}/auth/login",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"directivo@educonecta.cl\",\n  \"password\": \"test1234\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const json = pm.response.json();",
+                            "if (json.access_token) {",
+                            "  pm.collectionVariables.set('directivo_token', json.access_token);",
+                            "}"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5B. GET /directivo/dashboard",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{directivo_token}}"
+                    }
+                ],
+                "url": "{{base_url}}/directivo/dashboard"
+            }
+        }
+    ]
+}
