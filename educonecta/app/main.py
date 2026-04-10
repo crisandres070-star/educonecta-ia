@@ -36,6 +36,11 @@ def on_startup() -> None:
     Base.metadata.create_all(bind=engine)
 
 
+@app.get("/")
+def root() -> dict[str, str]:
+    return {"message": "EduConecta IA API activa"}
+
+
 @app.get("/health")
 def health_check() -> dict[str, str]:
     return {"status": "ok"}
